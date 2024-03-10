@@ -283,7 +283,7 @@ static void zclApp_ReadSensors(void)
       break;
     }
     zclApp_Energies.Energy_T1 = Energy;
-    LREP("Energy 1 = %x\r\n", zclApp_Energies.Energy_T1);
+    LREP("Energy 1 = %x\r\n", zclApp_Energies.Energy_T2);
     bdb_RepChangedAttrValue(SECOND_ENDPOINT, SE_METERING, ATTRID_SE_METERING_CURR_TIER1_SUMM_DLVD);
     break;
   case 10:
@@ -309,7 +309,7 @@ static void zclApp_ReadSensors(void)
       break;
     }
     zclApp_Energies.Energy_T3 = Energy;
-    LREP("Energy 3 = %x\r\n", zclApp_Energies.Energy_T1);
+    LREP("Energy 3 = %x\r\n", zclApp_Energies.Energy_T3);
     bdb_RepChangedAttrValue(SECOND_ENDPOINT, SE_METERING, ATTRID_SE_METERING_CURR_TIER3_SUMM_DLVD);
     break;
   case 14:
@@ -322,7 +322,7 @@ static void zclApp_ReadSensors(void)
       break;
     }
     zclApp_Energies.Energy_T4 = Energy;
-    LREP("Energy 1 = %x\r\n", zclApp_Energies.Energy_T4);
+    LREP("Energy 4 = %x\r\n", zclApp_Energies.Energy_T4);
     bdb_RepChangedAttrValue(SECOND_ENDPOINT, SE_METERING, ATTRID_SE_METERING_CURR_TIER4_SUMM_DLVD);
     break;
   case 16:
