@@ -34,7 +34,7 @@ static void Mercury230_StartStopData(uint8 serial_num, uint8 cmd)
   if (cmd == 1) {
     uint8 readMercury[11]  = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
   
-    readMercury[0] = 0x26; //serial_num;
+    readMercury[0] = serial_num;
     readMercury[1] = cmd; 
     readMercury[2] = 0x01; // уровень доступа
     
@@ -61,7 +61,7 @@ static void Mercury230_StartStopData(uint8 serial_num, uint8 cmd)
   else {
     uint8 readMercury[4]  = {0x00, 0x00, 0x00, 0x00};
   
-    readMercury[0] = 0x26; //serial_num;
+    readMercury[0] = serial_num;
     readMercury[1] = cmd; 
     
     uint16 crc = MODBUS_CRC16(readMercury, 2);

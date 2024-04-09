@@ -216,7 +216,6 @@ static void zclApp_ReadSensors(void)
   switch (currentSensorsReadingPhase++) {
   case 0: // 
     HalLedSet(HAL_LED_1, HAL_LED_MODE_BLINK);
-//    (*mercury_dev->RequestMeasure)(zclApp_Config.DeviceAddress, 0x63);
     (*mercury_dev->StartStopData)(zclApp_Config.DeviceAddress, 0x01);
     break;
   case 1:

@@ -56,7 +56,7 @@ const uint8 zclApp_ManufacturerName[] = {7, 'B', 'a', 'c', 'c', 'h', 'u', 's'};
 const uint8 zclApp_ModelId[] = {19, 'M', 'e', 'r', 'c', 'u', 'r', 'y', '_', '3', 'p', 'h', '_', 'C', 'o', 'u', 'n', 't', 'e', 'r'};
 const uint8 zclApp_PowerSource = POWER_SOURCE_MAINS_1_PHASE;
 
-#define DEFAULT_DeviceAddress 38
+#define DEFAULT_DeviceAddress 0
 #define DEFAULT_MeasurementPeriod 15
 #define DEFAULT_VoltageDivisor 100
 #define DEFAULT_CurrentDivisor 1000
