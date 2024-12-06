@@ -6,7 +6,7 @@ const e = exposes.presets;
 const fz = zigbeeHerdsmanConverters.fromZigbeeConverters || zigbeeHerdsmanConverters.fromZigbee;
 const tz = zigbeeHerdsmanConverters.toZigbeeConverters || zigbeeHerdsmanConverters.toZigbee;
 const reporting = require('zigbee-herdsman-converters/lib/reporting');
-const {postfixWithEndpointName} = require('zigbee-herdsman-converters/lib/utils');
+const utils = require('zigbee-herdsman-converters/lib/utils');
 
 const ACCESS_STATE = 0b001, ACCESS_WRITE = 0b010, ACCESS_READ = 0b100;
 const ZCL_DATATYPE_UINT16 = 0x21;
@@ -19,35 +19,60 @@ const fz_local = {
         type: ['attributeReport', 'readResponse'],
         convert: (model, msg, publish, options, meta) => {
             const result = {};
+
+            const factor = 0.001;
+            const prec = 3;
+
+            let energy_t1 = 0;
+            let energy_t2 = 0;
+            let energy_t3 = 0;
+            let energy_t4 = 0;
             let energy_all = 0;
+
             if (msg.data.hasOwnProperty('currentTier1SummDelivered')) {
                 const data = msg.data['currentTier1SummDelivered'];
-                result.energy_t1 = (data & 0xFFFFFFFF) / 1000;
-                energy_all += result.energy_t1;
+                if (Array.isArray(data))
+                    energy_t1 = data[1]
+                else
+                    energy_t1 = (data & 0xFFFFFFFF);
+                result.energy_t1 = utils.precisionRound((energy_t1 * factor), prec);
+                energy_all += energy_t1;
             }
             if (msg.data.hasOwnProperty('currentTier2SummDelivered')) {
                 const data = msg.data['currentTier2SummDelivered'];
-                result.energy_t2 =  (data & 0xFFFFFFFF) / 1000;
-                energy_all +=  result.energy_t2;
+                if (Array.isArray(data))
+                    energy_t2 = data[1]
+                else
+                    energy_t2 =(data & 0xFFFFFFFF);
+                result.energy_t2 = utils.precisionRound((energy_t2 * factor), prec);
+                energy_all += energy_t2;
                 }
             if (msg.data.hasOwnProperty('currentTier3SummDelivered')) {
                 const data = msg.data['currentTier3SummDelivered'];
-                result.energy_t3 =  (data & 0xFFFFFFFF) / 1000;
-                energy_all += result.energy_t3;
+                if (Array.isArray(data))
+                    energy_t3 = data[1]
+                else
+                    energy_t3 =(data & 0xFFFFFFFF);
+                result.energy_t3 = utils.precisionRound((energy_t3 * factor), prec);
+                energy_all += energy_t3;
             }
             if (msg.data.hasOwnProperty('currentTier4SummDelivered')) {
                 const data = msg.data['currentTier4SummDelivered'];
-                result.energy_t4 =  (data & 0xFFFFFFFF) / 1000;
-                energy_all += result.energy_t4;
+                if (Array.isArray(data))
+                    energy_t4 = data[1]
+                else
+                    energy_t4 =(data & 0xFFFFFFFF);
+                result.energy_t4 = utils.precisionRound((energy_t4 * factor), prec);
+                energy_all += energy_t4;
             }
             
             if (msg.data.hasOwnProperty(0xF001)) {
-                result[postfixWithEndpointName('device_address', msg, model, meta)] = msg.data[0xF001];
+                result[utils.postfixWithEndpointName('device_address', msg, model, meta)] = msg.data[0xF001];
             }
             if (msg.data.hasOwnProperty(0xF002)) {
-                result[postfixWithEndpointName('measurement_period', msg, model, meta)] = msg.data[0xF002];
+                result[utils.postfixWithEndpointName('measurement_period', msg, model, meta)] = msg.data[0xF002];
             }
-            result.energy_all = energy_all.toFixed(3);
+            result.energy_all = utils.precisionRound((energy_all * factor), prec);
             return result;
         },
     }, 
@@ -124,17 +149,17 @@ configure: async (device, coordinatorEndpoint, logger) => {
     exposes: [
         exposes.numeric('temperature', ACCESS_STATE).withUnit('°C').withDescription('Measured temperature value').withEndpoint('l1'), 
         
-        e.power().withEndpoint('l1'), 
-        e.current().withEndpoint('l1'), 
         e.voltage().withEndpoint('l1'), 
+        e.current().withEndpoint('l1'), 
+        e.power().withEndpoint('l1'), 
 
-        e.numeric('power_phase_b', ACCESS_STATE).withEndpoint('l1').withUnit('W').withDescription('Instantaneous measured power on phase B'), 
-        e.current_phase_b().withEndpoint('l1'), 
         e.voltage_phase_b().withEndpoint('l1'), 
+        e.current_phase_b().withEndpoint('l1'), 
+        e.power_phase_b().withEndpoint('l1'), 
 
-        e.numeric('power_phase_c', ACCESS_STATE).withEndpoint('l1').withUnit('W').withDescription('Instantaneous measured power on phase C'), 
-        e.current_phase_c().withEndpoint('l1'), 
         e.voltage_phase_c().withEndpoint('l1'), 
+        e.current_phase_c().withEndpoint('l1'), 
+        e.power_phase_c().withEndpoint('l1'), 
 
         e.numeric('energy_t1', ACCESS_STATE).withUnit('kWh').withDescription('Energy on tariff 1'), 
         e.numeric('energy_t2', ACCESS_STATE).withUnit('kWh').withDescription('Energy on tariff 2'), 

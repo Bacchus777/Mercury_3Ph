@@ -181,7 +181,7 @@ current_values_t Mercury230_ReadCurrentValues(uint8 cmd)
     
   
   uint16 crc = MODBUS_CRC16(response, length - 2);
-
+  
   LREP("Real CRC: ");
   LREP("0x%X ", crc & 0xFF);
   LREP("0x%X\r\n", (crc>>8) & 0xFF);
@@ -196,12 +196,17 @@ current_values_t Mercury230_ReadCurrentValues(uint8 cmd)
   case REQ_VOLTAGE:
     for (int i = 0; i <= 2; i++) 
       result.Voltage[i] = response[1 + i * 3 + shift] * 0x10000 + response[3 + i * 3 + shift] * 0x100 + response[2 + i * 3 + shift];
+    break;
   case REQ_CURRENT:
     for (int i = 0; i <= 2; i++) 
       result.Current[i] = response[1 + i * 3 + shift] * 0x10000 + response[3 + i * 3 + shift] * 0x100 + response[2 + i * 3 + shift];
-  default:
-    for (int i = 0; i <= 2; i++) 
-      result.Power[i]   = response[1 + i * 3 + shift] * 0x10000 + response[3 + i * 3 + shift] * 0x100 + response[2 + i * 3 + shift];
+    break;
+  case REQ_POWER:
+    for (int i = 0; i <= 2; i++) {
+      uint32 power = (uint32)(response[1 + i * 3 + shift] & 0x0f) * 0x10000 + (uint32)response[3 + i * 3 + shift] * 0x100 + response[2 + i * 3 + shift];
+      LREP("power %ld\r\n", power);
+      result.Power[i] = (int16)(power / 100);
+    }
   }
   return result;
 }
@@ -232,7 +237,7 @@ uint32 Mercury230_ReadEnergy(uint8 cmd)
         return result;
     }
 
-    result =  response[2] * 0x1000000 + response[1] * 0x10000 + response[4] * 0x100 + response[3];
+    result =  (uint32)response[2] * 0x1000000 + (uint32)response[1] * 0x10000 + (uint32)response[4] * 0x100 + (uint32)response[3];
     LREP("Result: %ld\r\n", result);
 
     return result;
