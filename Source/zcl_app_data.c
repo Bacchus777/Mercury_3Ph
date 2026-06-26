@@ -79,6 +79,7 @@ current_values_t zclApp_CurrentValues =
     .Voltage = {0, 0, 0},
     .Current = {0, 0, 0},
     .Power   = {0, 0, 0},
+    .NeutralCurrent = 0,
   }
 ;
 
@@ -119,7 +120,9 @@ CONST zclAttrRec_t zclApp_Attrs_FirstEP[] = {
     {ELECTRICAL, {ATTRID_ELECTRICAL_MEASUREMENT_RMS_VOLTAGE_PH_C, ZCL_UINT16, RR, (void *)&zclApp_CurrentValues.Voltage[2]}},
     {ELECTRICAL, {ATTRID_ELECTRICAL_MEASUREMENT_RMS_CURRENT_PH_C, ZCL_UINT16, RR, (void *)&zclApp_CurrentValues.Current[2]}},
     {ELECTRICAL, {ATTRID_ELECTRICAL_MEASUREMENT_ACTIVE_POWER_PH_C, ZCL_INT16, RR, (void *)&zclApp_CurrentValues.Power[2]}},
-    
+
+    {ELECTRICAL, {ATTRID_ELECTRICAL_MEASUREMENT_NEUTRAL_CURRENT, ZCL_UINT16, RR, (void *)&zclApp_CurrentValues.NeutralCurrent}},
+
     {ELECTRICAL, {ATTRID_ELECTRICAL_MEASUREMENT_AC_VOLTAGE_DIVISOR, ZCL_UINT16, R, (void *)&zclApp_Config.VoltageDivisor}},
     {ELECTRICAL, {ATTRID_ELECTRICAL_MEASUREMENT_AC_CURRENT_DIVISOR, ZCL_UINT16, R, (void *)&zclApp_Config.CurrentDivisor}},
     {ELECTRICAL, {ATTRID_ELECTRICAL_MEASUREMENT_AC_POWER_DIVISOR, ZCL_UINT16, R, (void *)&zclApp_Config.PowerDivisor}},
@@ -150,6 +153,7 @@ SimpleDescriptionFormat_t zclApp_FirstEP = {
 
 CONST zclAttrRec_t zclApp_Attrs_SecondEP[] = {
 
+    {SE_METERING, {ATTRID_SE_METERING_CURR_TIER5_SUMM_DLVD, ZCL_UINT48, RR, (void *)&zclApp_Energies.Energy_T5}},
     {SE_METERING, {ATTRID_SE_METERING_CURR_SUMM_DLVD,       ZCL_UINT48, RR, (void *)&zclApp_Energies.Energy_T0}},
     {SE_METERING, {ATTRID_SE_METERING_CURR_TIER1_SUMM_DLVD, ZCL_UINT48, RR, (void *)&zclApp_Energies.Energy_T1}},
     {SE_METERING, {ATTRID_SE_METERING_CURR_TIER2_SUMM_DLVD, ZCL_UINT48, RR, (void *)&zclApp_Energies.Energy_T2}},

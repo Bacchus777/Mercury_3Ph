@@ -126,23 +126,22 @@ configure: async (device, coordinatorEndpoint, logger) => {
         await first_endpoint.read('haElectricalMeasurement', ['acCurrentMultiplier', 'acCurrentDivisor']);
         await first_endpoint.read('haElectricalMeasurement', ['acPowerMultiplier', 'acPowerDivisor']);
 
-        await reporting.rmsVoltage(first_endpoint);
-        await reporting.rmsCurrent(first_endpoint);
-        await reporting.activePower(first_endpoint);
-        await reporting.temperature(first_endpoint);
+        await first_endpoint.configureReporting('msTemperatureMeasurement', [{attribute: 'measuredValue',   minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 5}]);
 
-        await second_endpoint.configureReporting('seMetering', [{attribute: 'currentSummDelivered', minimumReportInterval: 0, maximumReportInterval: 30, reportableChange: 0}]);
-        await second_endpoint.configureReporting('seMetering', [{attribute: 'currentTier1SummDelivered', minimumReportInterval: 0, maximumReportInterval: 30, reportableChange: 0}]);
-        await second_endpoint.configureReporting('seMetering', [{attribute: 'currentTier2SummDelivered', minimumReportInterval: 0, maximumReportInterval: 30, reportableChange: 0}]);
-        await second_endpoint.configureReporting('seMetering', [{attribute: 'currentTier3SummDelivered', minimumReportInterval: 0, maximumReportInterval: 30, reportableChange: 0}]);
-        await second_endpoint.configureReporting('seMetering', [{attribute: 'currentTier4SummDelivered', minimumReportInterval: 0, maximumReportInterval: 30, reportableChange: 0}]);
+        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'rmsVoltage',       minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 1}]);
+        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'rmsVoltagePhB',    minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 1}]);
+        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'rmsVoltagePhC',    minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 1}]);
+        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'rmsCurrent',       minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 1}]);
+        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'rmsCurrentPhB',    minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 1}]);
+        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'rmsCurrentPhC',    minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 1}]);
+        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'activePower',      minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 1}]);
+        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'activePowerPhB',   minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 1}]);
+        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'activePowerPhC',   minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 1}]);
 
-        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'rmsVoltagePhB', minimumReportInterval: 0, maximumReportInterval: 30, reportableChange: 0}]);
-        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'rmsVoltagePhC', minimumReportInterval: 0, maximumReportInterval: 30, reportableChange: 0}]);
-        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'rmsCurrentPhB', minimumReportInterval: 0, maximumReportInterval: 30, reportableChange: 0}]);
-        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'rmsCurrentPhC', minimumReportInterval: 0, maximumReportInterval: 30, reportableChange: 0}]);
-        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'activePowerPhB', minimumReportInterval: 0, maximumReportInterval: 30, reportableChange: 0}]);
-        await first_endpoint.configureReporting('haElectricalMeasurement', [{attribute: 'activePowerPhC', minimumReportInterval: 0, maximumReportInterval: 30, reportableChange: 0}]);
+        await second_endpoint.configureReporting('seMetering', [{attribute: 'currentTier1SummDelivered',    minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 1}]);
+        await second_endpoint.configureReporting('seMetering', [{attribute: 'currentTier2SummDelivered',    minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 1}]);
+        await second_endpoint.configureReporting('seMetering', [{attribute: 'currentTier3SummDelivered',    minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 1}]);
+        await second_endpoint.configureReporting('seMetering', [{attribute: 'currentTier4SummDelivered',    minimumReportInterval: 0, maximumReportInterval: 300, reportableChange: 1}]);
 
 
         },

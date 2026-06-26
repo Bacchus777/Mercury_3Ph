@@ -238,7 +238,6 @@ static void zclApp_ReadSensors(void)
     LREP("Voltage 1 = %d\r\n", zclApp_CurrentValues.Voltage[0]);
     LREP("Voltage 2 = %d\r\n", zclApp_CurrentValues.Voltage[1]);
     LREP("Voltage 3 = %d\r\n", zclApp_CurrentValues.Voltage[2]);
-    bdb_RepChangedAttrValue(FIRST_ENDPOINT, ELECTRICAL, ATTRID_ELECTRICAL_MEASUREMENT_RMS_VOLTAGE_PH_B);
     break;
   case 4:
     (*mercury_dev->RequestMeasure)(zclApp_Config.DeviceAddress, REQ_CURRENT);
@@ -254,7 +253,6 @@ static void zclApp_ReadSensors(void)
     LREP("Current 1 = %d\r\n", zclApp_CurrentValues.Current[0]);
     LREP("Current 2 = %d\r\n", zclApp_CurrentValues.Current[1]);
     LREP("Current 3 = %d\r\n", zclApp_CurrentValues.Current[2]);
-    bdb_RepChangedAttrValue(FIRST_ENDPOINT, ELECTRICAL, ATTRID_ELECTRICAL_MEASUREMENT_RMS_VOLTAGE_PH_B);
     break;
   case 6:
     (*mercury_dev->RequestMeasure)(zclApp_Config.DeviceAddress, REQ_POWER);
@@ -279,11 +277,11 @@ static void zclApp_ReadSensors(void)
     Energy = (*mercury_dev->ReadEnergy)(REQ_ENERGY_T1);
     if (Energy == MERCURY_INVALID_RESPONSE) {
       LREPMaster("Invalid response from counter\r\n");
-      break;
     }
-    zclApp_Energies.Energy_T1 = Energy;
-    LREP("Energy 1 = %x\r\n", zclApp_Energies.Energy_T2);
-    bdb_RepChangedAttrValue(SECOND_ENDPOINT, SE_METERING, ATTRID_SE_METERING_CURR_TIER1_SUMM_DLVD);
+    else {
+      zclApp_Energies.Energy_T1 = Energy;
+      LREP("Energy 1 = %x\r\n", zclApp_Energies.Energy_T2);
+    }
     break;
   case 10:
     (*mercury_dev->RequestMeasure)(zclApp_Config.DeviceAddress, REQ_ENERGY_T2);
@@ -292,11 +290,11 @@ static void zclApp_ReadSensors(void)
     Energy = (*mercury_dev->ReadEnergy)(REQ_ENERGY_T2);
     if (Energy == MERCURY_INVALID_RESPONSE) {
       LREPMaster("Invalid response from counter\r\n");
-      break;
     }
-    zclApp_Energies.Energy_T2 = Energy;
-    LREP("Energy 2 = %x\r\n", zclApp_Energies.Energy_T2);
-    bdb_RepChangedAttrValue(SECOND_ENDPOINT, SE_METERING, ATTRID_SE_METERING_CURR_TIER2_SUMM_DLVD);
+    else {
+      zclApp_Energies.Energy_T2 = Energy;
+      LREP("Energy 2 = %x\r\n", zclApp_Energies.Energy_T2);
+    }
     break;
   case 12:
     (*mercury_dev->RequestMeasure)(zclApp_Config.DeviceAddress, REQ_ENERGY_T3);
@@ -305,11 +303,11 @@ static void zclApp_ReadSensors(void)
     Energy = (*mercury_dev->ReadEnergy)(REQ_ENERGY_T3);
     if (Energy == MERCURY_INVALID_RESPONSE) {
       LREPMaster("Invalid response from counter\r\n");
-      break;
     }
-    zclApp_Energies.Energy_T3 = Energy;
-    LREP("Energy 3 = %x\r\n", zclApp_Energies.Energy_T3);
-    bdb_RepChangedAttrValue(SECOND_ENDPOINT, SE_METERING, ATTRID_SE_METERING_CURR_TIER3_SUMM_DLVD);
+    else{
+      zclApp_Energies.Energy_T3 = Energy;
+      LREP("Energy 3 = %x\r\n", zclApp_Energies.Energy_T3);
+    }
     break;
   case 14:
     (*mercury_dev->RequestMeasure)(zclApp_Config.DeviceAddress, REQ_ENERGY_T4);
@@ -320,8 +318,11 @@ static void zclApp_ReadSensors(void)
       LREPMaster("Invalid response from counter\r\n");
       break;
     }
-    zclApp_Energies.Energy_T4 = Energy;
-    LREP("Energy 4 = %x\r\n", zclApp_Energies.Energy_T4);
+    else {
+      zclApp_Energies.Energy_T4 = Energy;
+      LREP("Energy 4 = %x\r\n", zclApp_Energies.Energy_T4);
+    }
+    zclApp_Energies.Energy_T0 = zclApp_Energies.Energy_T1 + zclApp_Energies.Energy_T2 + zclApp_Energies.Energy_T3 + zclApp_Energies.Energy_T4;
     bdb_RepChangedAttrValue(SECOND_ENDPOINT, SE_METERING, ATTRID_SE_METERING_CURR_TIER4_SUMM_DLVD);
     break;
   case 16:

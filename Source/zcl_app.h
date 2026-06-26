@@ -53,6 +53,7 @@ extern "C" {
 #define ATTRID_SE_METERING_CURR_TIER2_SUMM_DLVD   0x0102
 #define ATTRID_SE_METERING_CURR_TIER3_SUMM_DLVD   0x0104
 #define ATTRID_SE_METERING_CURR_TIER4_SUMM_DLVD   0x0106
+#define ATTRID_SE_METERING_CURR_TIER5_SUMM_DLVD   0x0108
 
 
 #define ZCL_UINT8     ZCL_DATATYPE_UINT8
@@ -92,6 +93,7 @@ typedef struct {
     uint16 Current[3];
     int16 Power[3];
     uint16 Voltage[3];
+    uint16 NeutralCurrent;
 } current_values_t;
 
 typedef struct {
@@ -100,6 +102,7 @@ typedef struct {
     uint32 Energy_T2;
     uint32 Energy_T3;
     uint32 Energy_T4;
+    uint32 Energy_T5;
 } energy_t;
 
 /*********************************************************************
